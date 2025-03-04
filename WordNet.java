@@ -1,8 +1,10 @@
+import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created on Fri Feb 28 2025
@@ -13,6 +15,7 @@ import java.util.List;
 public class WordNet {
   private Digraph graph;
   private List<String> synsetList = new ArrayList<>();
+  private Map<String, Bag<Integer>> nounToIDs = new HashMap<>();
 
   // Why arraylist?
   // can access via index (ID) in O(1)
@@ -24,7 +27,22 @@ public class WordNet {
     // add all synsets to arraylist
     In inSyn = new In(synsets); // create input stream with file name
     while (inSyn.hasNextLine()) {
-      synsetList.add(inSyn.readLine().split(",")[1]); // split ID from synset, add the string
+      String[] synsetLine = inSyn.readLine().split(",");
+      int currentLineID = Integer.parseInt(synsetLine[0]);
+      String[] currentSynset = synsetLine[1].split(" ");
+
+      for (int i = 0; i < currentSynset.length; i++) {
+        String currentNoun = currentSynset[i];
+
+        if (nounToIDs.containsKey(currentNoun)) { // if noun in map, update bag
+          nounToIDs.get(currentNoun).add(currentLineID);
+        } else { // if not, add new bag
+          Bag<Integer> idBag = new Bag<>();
+          idBag.add(currentLineID);
+          nounToIDs.put(currentNoun, idBag);
+        }
+      }
+      synsetList.add(synsetLine[1]); // split ID from synset, add the string
     }
 
     // add all hypernyms to graph
@@ -53,20 +71,26 @@ public class WordNet {
   // is the word a WordNet noun?
   public boolean isNoun(String word) {
     // System.out.println(Collections.binarySearch(synsetList, word)); //debug
-    return Collections.binarySearch(synsetList, word) >= 0; // binary search return < 0 if not found
+    return nounToIDs.containsKey(word);
   }
 
   // distance between nounA and nounB (defined below)
-  // public int distance(String nounA, String nounB)
+  public int distance(String nounA, String nounB) {
+    SAP sap = new SAP(graph);
+    return sap.length(nounToIDs.get(nounA), nounToIDs.get(nounB));
+  }
 
   // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
   // in a shortest ancestral path (defined below)
-  // public String sap(String nounA, String nounB)
+  public String sap(String nounA, String nounB) {
+    SAP sap = new SAP(graph);
+    return synsetList.get(sap.ancestor(nounToIDs.get(nounA), nounToIDs.get(nounB)));
+  }
 
   // do unit testing of this class
   public static void main(String[] args) {
     // file location depends on your file structure
     WordNet wordNet = new WordNet("wordnet\\synsets.txt", "wordnet\\hypernyms.txt");
-    System.out.println(wordNet.isNoun("jdcn")); // returns false
+    System.out.println(wordNet.distance("Black_Plague", "black_marlin"));
   }
 }
