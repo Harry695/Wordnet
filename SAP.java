@@ -28,15 +28,6 @@ public class SAP {
     BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
     BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
 
-    // heuristic for easiest case
-    if (vBFS.hasPathTo(w)) {
-      return vBFS.distTo(w);
-    }
-
-    if (wBFS.hasPathTo(v)) {
-      return wBFS.distTo(v);
-    }
-
     int minLen = Integer.MAX_VALUE;
 
     // search through all vertices, find point that is connected to both v and w with smallest
@@ -57,15 +48,6 @@ public class SAP {
   public int ancestor(int v, int w) {
     BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
     BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
-
-    // heuristic for easiest case
-    if (vBFS.hasPathTo(w)) {
-      return v;
-    }
-
-    if (wBFS.hasPathTo(v)) {
-      return w;
-    }
 
     int minLen = Integer.MAX_VALUE;
     int ancestor = -1;
