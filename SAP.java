@@ -15,7 +15,12 @@ public class SAP {
 
   // constructor takes a digraph (not necessarily a DAG)
   public SAP(Digraph G) {
-    graph = G;
+    graph = new Digraph(G.V());
+    for (int v = 0; v < G.V(); v++) {
+      for (int w : G.adj(v)) {
+        graph.addEdge(v, w);
+      }
+    }
   }
 
   // length of shortest ancestral path between v and w; -1 if no such path
@@ -34,7 +39,8 @@ public class SAP {
 
     int minLen = Integer.MAX_VALUE;
 
-    // search through all vertices, find point that is connected to both v and w with smallest distance
+    // search through all vertices, find point that is connected to both v and w with smallest
+    // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
         minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
@@ -64,7 +70,8 @@ public class SAP {
     int minLen = Integer.MAX_VALUE;
     int ancestor = -1;
 
-    // search through all vertices, find point that is connected to both v and w with smallest distance
+    // search through all vertices, find point that is connected to both v and w with smallest
+    // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
         minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
@@ -86,7 +93,8 @@ public class SAP {
 
     int minLen = Integer.MAX_VALUE;
 
-    // search through all vertices, find point that is connected to both v and w with smallest distance
+    // search through all vertices, find point that is connected to both v and w with smallest
+    // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
         minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
@@ -103,11 +111,12 @@ public class SAP {
   public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
     BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
     BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
-    
+
     int minLen = Integer.MAX_VALUE;
     int ancestor = -1;
 
-    // search through all vertices, find point that is connected to both v and w with smallest distance
+    // search through all vertices, find point that is connected to both v and w with smallest
+    // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
         minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
