@@ -80,10 +80,46 @@ public class SAP {
 
   // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such
   // path
-  // public int length(Iterable<Integer> v, Iterable<Integer> w)
+  public int length(Iterable<Integer> v, Iterable<Integer> w) {
+    BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
+    BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
+
+    int minLen = Integer.MAX_VALUE;
+
+    // search through all vertices, find point that is connected to both v and w with smallest distance
+    for (int i = 0; i < graph.V(); i++) {
+      if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
+        minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
+      }
+    }
+
+    if (minLen != Integer.MAX_VALUE) {
+      return minLen;
+    }
+    return -1;
+  }
 
   // a common ancestor that participates in shortest ancestral path; -1 if no such path
-  // public int ancestor(Iterable<Integer> v, Iterable<Integer> w)
+  public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
+    BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
+    BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
+    
+    int minLen = Integer.MAX_VALUE;
+    int ancestor = -1;
+
+    // search through all vertices, find point that is connected to both v and w with smallest distance
+    for (int i = 0; i < graph.V(); i++) {
+      if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
+        minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
+        ancestor = i;
+      }
+    }
+
+    if (minLen != Integer.MAX_VALUE) {
+      return ancestor;
+    }
+    return -1;
+  }
 
   // do unit testing of this class
   public static void main(String[] args) {
