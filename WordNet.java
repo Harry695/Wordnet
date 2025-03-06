@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.DirectedCycle;
 import edu.princeton.cs.algs4.In;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,15 @@ public class WordNet {
 
   // constructor takes the name of the two input files
   public WordNet(String synsets, String hypernyms) {
+    if (synsets == null || hypernyms == null) {
+      throw new IllegalArgumentException();
+    }
+
+    DirectedCycle dc = new DirectedCycle(graph);
+    if (dc.hasCycle()) {
+      throw new IllegalArgumentException();
+    }
+    
     // add all synsets to arraylist
     In inSyn = new In(synsets); // create input stream with file name
     while (inSyn.hasNextLine()) {
@@ -70,12 +80,24 @@ public class WordNet {
 
   // is the word a WordNet noun?
   public boolean isNoun(String word) {
+    if (word == null) {
+      throw new IllegalArgumentException();
+    }
+
     // System.out.println(Collections.binarySearch(synsetList, word)); //debug
     return nounToIDs.containsKey(word);
   }
 
   // distance between nounA and nounB (defined below)
   public int distance(String nounA, String nounB) {
+    if (nounA == null || nounB == null) {
+      throw new IllegalArgumentException();
+    }
+
+    if (!isNoun(nounA) || !isNoun(nounB)) {
+      throw new IllegalArgumentException();
+    }
+    
     SAP sap = new SAP(graph);
     return sap.length(nounToIDs.get(nounA), nounToIDs.get(nounB));
   }
@@ -83,6 +105,14 @@ public class WordNet {
   // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
   // in a shortest ancestral path (defined below)
   public String sap(String nounA, String nounB) {
+    if (nounA == null || nounB == null) {
+      throw new IllegalArgumentException();
+    }
+
+    if (!isNoun(nounA) || !isNoun(nounB)) {
+      throw new IllegalArgumentException();
+    }
+
     SAP sap = new SAP(graph);
     return synsetList.get(sap.ancestor(nounToIDs.get(nounA), nounToIDs.get(nounB)));
   }

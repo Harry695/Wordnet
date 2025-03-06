@@ -5,6 +5,10 @@ public class Outcast {
   WordNet wordNet;
 
   public Outcast(WordNet wordnet) { // constructor takes a WordNet object
+		if (wordnet == null) {
+			throw new IllegalArgumentException();
+		}
+		
     this.wordNet = wordnet;
   }
 

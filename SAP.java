@@ -15,6 +15,10 @@ public class SAP {
 
   // constructor takes a digraph (not necessarily a DAG)
   public SAP(Digraph G) {
+    if (G == null) {
+      throw new IllegalArgumentException();
+    }
+    
     graph = new Digraph(G.V());
     for (int v = 0; v < G.V(); v++) {
       for (int w : G.adj(v)) {
@@ -70,6 +74,13 @@ public class SAP {
   // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such
   // path
   public int length(Iterable<Integer> v, Iterable<Integer> w) {
+    if (v == null || w == null) {
+      throw new IllegalArgumentException();
+    }
+    if (!validList(v) || !validList(w)) {
+      throw new IllegalArgumentException();
+    }
+
     BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
     BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
 
@@ -91,6 +102,13 @@ public class SAP {
 
   // a common ancestor that participates in shortest ancestral path; -1 if no such path
   public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
+    if (v == null || w == null) {
+      throw new IllegalArgumentException();
+    }
+    if (!validList(v) || !validList(w)) {
+      throw new IllegalArgumentException();
+    }
+    
     BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
     BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
 
@@ -124,5 +142,18 @@ public class SAP {
       int ancestor = sap.ancestor(v, w);
       StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
     }
+  }
+
+  private boolean validList(Iterable<Integer> list) {
+    for (Integer i : list) {
+      if (i == null || isInRange(i)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean isInRange(int i) {
+    return i >= 0 && i < graph.V();
   }
  }
