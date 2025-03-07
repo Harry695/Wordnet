@@ -18,7 +18,7 @@ public class SAP {
     if (G == null) {
       throw new IllegalArgumentException();
     }
-    
+
     graph = new Digraph(G.V());
     for (int v = 0; v < G.V(); v++) {
       for (int w : G.adj(v)) {
@@ -60,8 +60,13 @@ public class SAP {
     // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
-        minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
-        ancestor = i;
+        System.out.println("true for " + i);
+
+        int currentDist = vBFS.distTo(i) + wBFS.distTo(i);
+        if (currentDist < minLen) {
+          minLen = currentDist;
+          ancestor = i;
+        }
       }
     }
 
@@ -108,7 +113,7 @@ public class SAP {
     if (!validList(v) || !validList(w)) {
       throw new IllegalArgumentException();
     }
-    
+
     BreadthFirstDirectedPaths vBFS = new BreadthFirstDirectedPaths(graph, v);
     BreadthFirstDirectedPaths wBFS = new BreadthFirstDirectedPaths(graph, w);
 
@@ -119,8 +124,13 @@ public class SAP {
     // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
-        minLen = Math.min(vBFS.distTo(i) + wBFS.distTo(i), minLen);
-        ancestor = i;
+        // System.out.println("true for " + i);
+
+        int currentDist = vBFS.distTo(i) + wBFS.distTo(i);
+        if (currentDist < minLen) {
+          minLen = currentDist;
+          ancestor = i;
+        }
       }
     }
 
@@ -132,7 +142,7 @@ public class SAP {
 
   // do unit testing of this class
   public static void main(String[] args) {
-    In in = new In("wordnet\\digraph1.txt");
+    In in = new In("wordnet\\digraph2.txt");
     Digraph G = new Digraph(in);
     SAP sap = new SAP(G);
     while (!StdIn.isEmpty()) {
