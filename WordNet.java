@@ -28,11 +28,7 @@ public class WordNet {
     if (synsets == null || hypernyms == null) {
       throw new IllegalArgumentException();
     }
-
-    DirectedCycle dc = new DirectedCycle(graph);
-    if (dc.hasCycle()) {
-      throw new IllegalArgumentException();
-    }
+    
     
     // add all synsets to arraylist
     In inSyn = new In(synsets); // create input stream with file name
@@ -40,7 +36,7 @@ public class WordNet {
       String[] synsetLine = inSyn.readLine().split(",");
       int currentLineID = Integer.parseInt(synsetLine[0]);
       String[] currentSynset = synsetLine[1].split(" ");
-
+      
       for (int i = 0; i < currentSynset.length; i++) {
         String currentNoun = currentSynset[i];
 
@@ -65,11 +61,15 @@ public class WordNet {
         graph.addEdge(Integer.parseInt(hypernym[0]), Integer.parseInt(hypernym[i]));
       }
     }
-
+    
+    DirectedCycle dc = new DirectedCycle(graph);
+    if (dc.hasCycle()) {
+      throw new IllegalArgumentException();
+    }
     // debug
     // System.out.println("Graph:\n" + graph);
     // for (String s : synsetList) {
-    //    System.out.println(s);
+      //    System.out.println(s);
     // }
   }
 
