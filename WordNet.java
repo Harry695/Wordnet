@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class WordNet {
   private Digraph graph;
+  private SAP sap;
   private List<String> synsetList = new ArrayList<>();
   private Map<String, Bag<Integer>> nounToIDs = new HashMap<>();
 
@@ -66,6 +67,8 @@ public class WordNet {
     if (dc.hasCycle()) {
       throw new IllegalArgumentException();
     }
+
+    sap = new SAP(graph);
     // debug
     // System.out.println("Graph:\n" + graph);
     // for (String s : synsetList) {
@@ -75,7 +78,7 @@ public class WordNet {
 
   // returns all WordNet nouns
   public Iterable<String> nouns() {
-    return synsetList;
+    return nounToIDs.keySet();
   }
 
   // is the word a WordNet noun?
@@ -98,7 +101,6 @@ public class WordNet {
       throw new IllegalArgumentException();
     }
     
-    SAP sap = new SAP(graph);
     return sap.length(nounToIDs.get(nounA), nounToIDs.get(nounB));
   }
 
@@ -113,7 +115,6 @@ public class WordNet {
       throw new IllegalArgumentException();
     }
 
-    SAP sap = new SAP(graph);
     return synsetList.get(sap.ancestor(nounToIDs.get(nounA), nounToIDs.get(nounB)));
   }
 

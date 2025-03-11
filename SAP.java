@@ -19,12 +19,7 @@ public class SAP {
       throw new IllegalArgumentException();
     }
 
-    graph = new Digraph(G.V());
-    for (int v = 0; v < G.V(); v++) {
-      for (int w : G.adj(v)) {
-        graph.addEdge(v, w);
-      }
-    }
+    graph = new Digraph(G);
   }
 
   // length of shortest ancestral path between v and w; -1 if no such path
