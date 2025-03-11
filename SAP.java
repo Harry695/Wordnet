@@ -60,7 +60,7 @@ public class SAP {
     // distance
     for (int i = 0; i < graph.V(); i++) {
       if (vBFS.hasPathTo(i) && wBFS.hasPathTo(i)) {
-        System.out.println("true for " + i);
+        // System.out.println("true for " + i);
 
         int currentDist = vBFS.distTo(i) + wBFS.distTo(i);
         if (currentDist < minLen) {
@@ -156,7 +156,7 @@ public class SAP {
 
   private boolean validList(Iterable<Integer> list) {
     for (Integer i : list) {
-      if (i == null || isInRange(i)) {
+      if (i == null || !isInRange(i)) {
         return false;
       }
     }
