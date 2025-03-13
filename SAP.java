@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
@@ -74,8 +76,11 @@ public class SAP {
   // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such
   // path
   public int length(Iterable<Integer> v, Iterable<Integer> w) {
-    if (v == null || w == null || !v.iterator().hasNext() || !w.iterator().hasNext()) {
+    if (v == null || w == null) {
       throw new IllegalArgumentException();
+    }
+    if (!v.iterator().hasNext() || !w.iterator().hasNext()) {
+      return -1;
     }
     if (!validList(v) || !validList(w)) {
       throw new IllegalArgumentException();
@@ -102,8 +107,11 @@ public class SAP {
 
   // a common ancestor that participates in shortest ancestral path; -1 if no such path
   public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
-    if (v == null || w == null || !v.iterator().hasNext() || !w.iterator().hasNext()) {
-      throw new IllegalArgumentException();
+    if (v == null || w == null) {
+      throw new IllegalArgumentException("wrong length");
+    }
+    if (!v.iterator().hasNext() || !w.iterator().hasNext()) {
+      return -1;
     }
     if (!validList(v) || !validList(w)) {
       throw new IllegalArgumentException();
@@ -140,6 +148,7 @@ public class SAP {
     In in = new In("wordnet\\digraph2.txt");
     Digraph G = new Digraph(in);
     SAP sap = new SAP(G);
+    System.out.println(sap.length(new Stack<Integer>(), new Stack<Integer>()));
     while (!StdIn.isEmpty()) {
       int v = StdIn.readInt();
       int w = StdIn.readInt();
