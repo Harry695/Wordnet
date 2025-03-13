@@ -68,6 +68,16 @@ public class WordNet {
       throw new IllegalArgumentException();
     }
 
+    int rootCount = 0;
+    for (int i = 0; i < graph.V(); i++) {
+      if (graph.outdegree(i) == 0) {
+        rootCount++;
+      }
+    }
+    if (rootCount > 1) {
+      throw new IllegalArgumentException();
+    }
+
     sap = new SAP(graph);
     // debug
     // System.out.println("Graph:\n" + graph);
